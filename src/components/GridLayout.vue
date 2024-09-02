@@ -1,12 +1,12 @@
 <template>
-    <div id="about-view">
+    <div id="grid-layout">
   
     </div>
   </template>
   
   <script>
   export default {
-      name: 'AboutView'
+      name: 'GridLayout'
   }
   </script>
   
