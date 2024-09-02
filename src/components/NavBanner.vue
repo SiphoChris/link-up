@@ -1,12 +1,12 @@
 <template>
-    <div id="about-view">
+    <div id="nav-banner">
   
     </div>
   </template>
   
   <script>
   export default {
-      name: 'AboutView'
+      name: 'NavBanner'
   }
   </script>
   

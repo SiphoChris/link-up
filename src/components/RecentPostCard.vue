@@ -1,12 +1,12 @@
 <template>
-    <div id="about-view">
+    <div id="recent-post-card">
   
     </div>
   </template>
   
   <script>
   export default {
-      name: 'AboutView'
+      name: 'RecentPostCard'
   }
   </script>
   

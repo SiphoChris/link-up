@@ -1,12 +1,12 @@
 <template>
-    <div id="about-view">
+    <div id="message-wrapper">
   
     </div>
   </template>
   
   <script>
   export default {
-      name: 'AboutView'
+      name: 'MessageWrapper'
   }
   </script>
   

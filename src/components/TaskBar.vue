@@ -1,12 +1,12 @@
 <template>
-    <div id="about-view">
+    <div id="task-bar">
   
     </div>
   </template>
   
   <script>
   export default {
-      name: 'AboutView'
+      name: 'TaskBar'
   }
   </script>
   
