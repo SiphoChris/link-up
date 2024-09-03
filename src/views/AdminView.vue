@@ -6,7 +6,9 @@
   
   <script>
   export default {
-      name: 'AdminView'
+      name: 'AdminView',
+      components: {
+      }
   }
   </script>
   

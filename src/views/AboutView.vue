@@ -1,12 +1,14 @@
 <template>
     <div id="about-view">
-  
+        
     </div>
   </template>
   
   <script>
   export default {
-      name: 'AboutView'
+      name: 'AboutView',
+      components: {
+      }
   }
   </script>
   

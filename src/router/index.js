@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
 const routes = [
+  
   {
     path: '/',
     name: 'base',
@@ -13,14 +14,24 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/signup',
+    name: 'signup',
+    component: () => import('../views/SignupView.vue')
+  },
+  {
     path: '/messages',
     name: 'messages',
     component: () => import('../views/DirectMessagesView.vue')
   },
   {
     path: '/profile',
-    name: 'prodile',
+    name: 'profile',
     component: () => import('../views/ProfileView.vue')
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('../views/AdminView.vue')
   },
 ]
 
