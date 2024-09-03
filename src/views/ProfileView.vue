@@ -6,7 +6,9 @@
   
   <script>
   export default {
-      name: 'ProfileView'
+      name: 'ProfileView',
+      components: {
+      }
   }
   </script>
   

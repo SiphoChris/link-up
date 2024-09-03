@@ -1,12 +1,14 @@
 <template>
     <div id="direct-messages-view">
-  
+       
     </div>
   </template>
   
   <script>
   export default {
-      name: 'DirectMessagesView'
+      name: 'DirectMessagesView',
+      components: {
+      }
   }
   </script>
   
