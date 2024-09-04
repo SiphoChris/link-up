@@ -1,16 +1,18 @@
 import { db } from '../config/index.js';
 
 export class Comments {
-    async getComments() {
-        const queryString = 'SELECT * FROM Comments';
+    async getComments(postId) {
+        const queryString = 'SELECT * FROM Comments WHERE post_id = ? ORDER BY created_at DESC';
         try {
-            const [rows] = await db.execute(queryString);
+            const [rows] = await db.execute(queryString, [postId]);
+
             if (rows.length === 0) {
                 return { success: false, status: 404, message: 'No comments found' };
             }
+
             return { success: true, status: 200, result: rows };
         } catch (err) {
-            console.error('Error fetching Comments:', err);
+            console.error('Error fetching comments for post:', err);
             return { success: false, message: err.message };
         }
     }
@@ -20,7 +22,7 @@ export class Comments {
         try {
             const [rows] = await db.execute(queryString, [id]);
             if (rows.length === 0) {
-                return { success: false,  status: 404, message: 'Comment not found' };
+                return { success: false, status: 404, message: 'Comment not found' };
             }
             return { success: true, result: rows[0] };
         } catch (err) {
@@ -50,7 +52,7 @@ export class Comments {
             if (result.affectedRows === 0) {
                 return { success: false, status: 404, message: 'Comment not found' };
             }
-            return { success: true, status: 201, result: { id } };
+            return { success: true, status: 200, result: { id } };
         } catch (err) {
             console.error('Error updating comment:', err);
             return { success: false, status: 500, message: err.message };

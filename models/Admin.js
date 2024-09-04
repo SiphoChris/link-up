@@ -37,13 +37,12 @@ export class Admin {
     }
   }
 
-
   async loginAdmin(email, password) {
     const queryString = "SELECT * FROM Users WHERE email = ? AND user_role = 'admin'";
     try {
       const [rows] = await db.execute(queryString, [email]);
       if (rows.length === 0) {
-        return { success: false, message: "User not found" };
+        return { success: false, message: "Admin not found" };
       }
 
       const user = rows[0];
@@ -104,8 +103,8 @@ export class Admin {
   }
 
   // Comment CRUD operations
-  async getComments() {
-    return await this.comments.getComments();
+  async getComments(postId) {
+    return await this.comments.getCommentsByPostId(postId);
   }
 
   async getCommentById(id) {
