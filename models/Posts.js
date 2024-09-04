@@ -1,8 +1,13 @@
 import { db } from '../config/index.js';
+import { Comments } from './Comments.js';
 
 export class Posts {
+    constructor() {
+        this.comments = new Comments();
+    }
+
     async getPosts() {
-        const queryString = 'SELECT * FROM Posts';
+        const queryString = 'SELECT * FROM Posts ORDER BY created_at DESC';
         try {
             const [rows] = await db.execute(queryString);
             if (rows.length === 0) {
@@ -16,13 +21,25 @@ export class Posts {
     }
 
     async getPostById(id) {
-        const queryString = 'SELECT * FROM Posts WHERE post_id = ?';
+        const postQuery = 'SELECT * FROM Posts WHERE post_id = ?';
         try {
-            const [rows] = await db.execute(queryString, [id]);
-            if (rows.length === 0) {
+            const [postRows] = await db.execute(postQuery, [id]);
+
+            if (postRows.length === 0) {
                 return { success: false, status: 404, message: 'Post not found' };
             }
-            return { success: true, result: rows[0] };
+
+            // Fetch comments related to this post
+            const commentsResponse = await this.comments.getCommentsByPostId(id);
+
+            // Include the comments in the post response
+            return {
+                success: true,
+                result: {
+                    ...postRows[0],
+                    comments: commentsResponse.success ? commentsResponse.result : []
+                }
+            };
         } catch (err) {
             console.error('Error getting post by ID:', err);
             return { success: false, status: 500, message: err.message };
