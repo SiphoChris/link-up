@@ -24,6 +24,11 @@ const routes = [
     component: () => import('../views/DirectMessagesView.vue')
   },
   {
+    path: '/comments/:id',
+    name: 'comments',
+    component: () => import('../views/CommentsView.vue')
+  },
+  {
     path: '/profile',
     name: 'profile',
     component: () => import('../views/ProfileView.vue')
