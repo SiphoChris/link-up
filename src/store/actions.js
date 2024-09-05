@@ -131,9 +131,10 @@ export default {
   async fetchAllPosts({ commit }) {
     try {
       const { data } = await axios.get(`${API_URL}/api/posts/all`);
-      const { results } = data;
-      if (results) {
-        commit("setPosts", results);
+      console.log(data);
+      
+      if (data) {
+        commit("setPosts", data);
       } else {
         toast.error("No posts found", {
           autoClose: 2000,
@@ -152,6 +153,9 @@ export default {
     try {
       const { data } = await axios.get(`${API_URL}/api/posts/${id}`);
       const { results } = data;
+      console.log(data);
+      console.log(results);
+      
       if (results) {
         commit("setPost", results);
       } else {
@@ -171,7 +175,7 @@ export default {
   async fetchRecentPosts({ commit }) {
     try {
       const { data } = await axios.get(`${API_URL}/api/posts/recent`);
-      console.log(data);
+    //   console.log(data);
       if (data) {
         commit("setRecentPosts", data);
       } else {
@@ -251,12 +255,11 @@ export default {
   // comments
   async fetchAllCommentsFromPost({ commit }, postId) {
     try {
-      const { data } = await axios.get(
-        `${API_URL}/api/comments/from/${postId}`
-      );
-      const { results } = data;
-      if (results) {
-        commit("setComments", results);
+      const { data } = await axios.get(`${API_URL}/api/comments/from/${postId}`);
+      console.log(data);
+      
+      if (data) {
+        commit("setComments", data);
       } else {
         toast.error("No comments found", {
           autoClose: 2000,
