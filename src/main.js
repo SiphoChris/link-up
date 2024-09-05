@@ -5,6 +5,7 @@ import store from './store'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
+import 'vue3-toastify/dist/index.css';
 import './assets/main.css'
 
 const app = createApp(App)
