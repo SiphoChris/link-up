@@ -2,7 +2,7 @@
   <div id="home-view">
     <main>
       <section id="recent-posts">
-        <h3 class="text-start ms-1">Recent Posts</h3>
+        <h3 class="text-center">Recent Posts</h3>
         <RecentPostWrapper />
       </section>
       <section id="posts-list">
@@ -29,3 +29,7 @@ export default {
   },
 };
 </script>
+<style scoped>
+
+
+</style>
