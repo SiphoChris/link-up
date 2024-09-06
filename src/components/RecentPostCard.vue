@@ -1,11 +1,14 @@
 <template>
   <div class="card">
-    <div class="user-info">
-      <span class="username">{{ username }}</span>
-      <span class="profile"><img :src="postAuthorProfile" /></span>
-    </div>
     <div class="post">
-      <span class="text">{{ postContent + "abcdefghijklmnopqrstuvwxyz" }}</span>
+      <span class="text">{{ postContent }}</span>
+    </div>
+    <div class="user-info">
+      <span class="profile"><img :src="postAuthorProfile" /></span>
+      <span class="username">{{ username }}</span>
+      <router-link :to="{ name: 'comments', params: { id: postId } }" class="view-comments">
+        View
+      </router-link>
     </div>
   </div>
 </template>
@@ -13,9 +16,10 @@
 <script>
 export default {
   name: "RecentPostCard",
-  props: ["username", "postAuthorProfile", "postContent"],
+  props: ["username", "postAuthorProfile", "postContent", "postId"],
 };
 </script>
+
 
 <style scoped>
 .card {
@@ -26,34 +30,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background: #fff;
   padding: 0.5rem;
-  padding-bottom: 3.4rem;
+  padding-bottom: 1rem;
   transition: all 120ms;
   position: relative;
-}
-
-.card::after {
-  content: "View More";
-  padding-top: 0.5rem;
-  border-radius: 0 0 0.4rem 0.4rem;
-  text-align: center;
-  position: absolute;
-  bottom: -60px;
-  background: #00ac7c;
-  color: #fff;
-  height: 2.5em;
-  width: 100%;
-  font-weight: 600;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: all 80ms;
-}
-
-.card:hover::after {
-  bottom: 0;
-  opacity: 1;
 }
 
 .card:active {
@@ -63,14 +45,14 @@ export default {
 .user-info {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: auto;
 }
 
 .card .profile {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   font-size: 0.9rem;
-  position: absolute;
-  left: 0.625rem;
-  bottom: 0.625rem;
   color: #000;
 }
 
@@ -86,21 +68,26 @@ export default {
 .card .username {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1rem;
-  position: absolute;
-  left: 3.5rem;
-  bottom: 1rem;
   font-weight: 400;
   color: #000;
   text-transform: capitalize;
 }
 
+.view-comments {
+  font-size: 0.9rem;
+  color: #00ac7c;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: auto;
+}
+
 .post {
   background: rgb(241, 241, 241);
   width: 100%;
-  height: calc(100% - 3rem); 
+  height: calc(100% - 4rem); 
   display: grid;
   place-items: center;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .post .text {
