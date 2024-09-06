@@ -1,16 +1,9 @@
 <template>
   <div class="recent-posts-wrapper m-auto">
     <div class="recent-posts container-fluid shadow-sm">
-      <Loader v-if="loading" />
       <div class="horizontal-scroll py-3">
-        <RecentPostCard
-          v-for="post in recentPosts"
-          :key="post.post_id"
-          :username="post.username"
-          :postAuthorProfile="post.profile_picture"
-          :postContent="post.content"
-          :postId="post.post_id"
-        />
+        <Loader v-if="loading" />
+        <RecentPostCard v-for="post in recentPosts" :key="post.post_id" :username="post.username" :postAuthorProfile="post.profile_picture" :postContent="post.content" />
       </div>
     </div>
   </div>
@@ -22,22 +15,29 @@ import Loader from "./LoaderComp.vue";
 import { mapState } from "vuex";
 
 export default {
-  name: "RecentPostWrapper",
+  name: "RecentPosts",
   components: {
     RecentPostCard,
     Loader,
   },
+
   data() {
     return {
       loading: true,
     };
   },
+
   computed: {
     ...mapState(["recentPosts"]),
   },
-  async created() {
-    await this.$store.dispatch("fetchRecentPosts");
-    this.loading = false;
+  methods: {
+    async getRecentPosts() {
+      await this.$store.dispatch("fetchRecentPosts");
+      this.loading = false;
+    },
+  },
+  created() {
+    this.getRecentPosts();
   },
 };
 </script>

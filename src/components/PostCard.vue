@@ -1,19 +1,41 @@
 <template>
   <div class="card">
-    <slot name="cardHeader"></slot>
-    <slot name="cardBody"></slot>
-    <slot name="cardFooter"></slot>
+    <div class="card-header">
+      <div class="profile">
+        <span class="profile-image"
+          ><img :src="profileImage" class="img-fluid"
+        /></span>
+        <span class="username">{{ username }}</span>
+      </div>
+      <span class="date">{{ formattedDate }}</span>
+    </div>
+    <div class="card-body">
+      <div class="content">
+        {{ postContent }}
+      </div>
+    </div>
+    <div class="card-interactions">
+      <router-link :to="{ name: 'comments', params: { id: postId } }">
+        <button type="button">Comments...</button>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
+import { formattedDate } from "../utils/index.js";
+
 export default {
   name: "PostCardComp",
+  props: ["profileImage", "username", "postDate", "postContent", "postId"],
+  computed: {
+    formattedDate,
+  },
 };
 </script>
 
 <style scoped>
-/* .profile-image img {
+.profile-image img {
   width: 3rem;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -55,7 +77,7 @@ export default {
   border-radius: 0.5rem;
   margin-bottom: 1rem;
 }
-button#comments-button {
+button {
   border: none;
   background: none;
   font-family: Arial, Helvetica, sans-serif;
@@ -68,5 +90,5 @@ button#comments-button {
   background-color: #dcdcdc;
   margin: 1.5rem 0;
   transition: background-color 0.2s ease-in-out;
-} */
+}
 </style>
