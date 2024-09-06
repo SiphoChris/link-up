@@ -5,19 +5,43 @@
         <h3 class="text-center">Recent Posts</h3>
         <RecentPostWrapper />
       </section>
+
       <section id="posts-list">
         <Loader v-if="loading" />
-        <ListLayout>
+        <ListLayout v-else>
           <template v-slot:list-wrapper>
             <PostCard
               v-for="post in posts"
               :key="post.post_id"
-              :postId="post.post_id"
-              :postContent="post.content"
-              :postDate="post.created_at"
-              :profileImage="post.profile_picture"
-              :username="post.username"
-            />
+            >
+              <template v-slot:cardHeader>
+                <div class="card-header">
+                  <div class="profile">
+                    <span class="profile-image">
+                      <img :src="post.profile_picture" class="img-fluid" />
+                    </span>
+                    <span class="username">{{ post.username }}</span>
+                  </div>
+                  <span class="date">{{ formatDate(post.created_at) }}</span>
+                </div>
+              </template>
+              <template v-slot:cardBody>
+                <div class="card-body">
+                  <div class="content">
+                    {{ post.content }}
+                  </div>
+                </div>
+              </template>
+              <template v-slot:cardFooter>
+                <div class="card-interactions">
+                  <router-link :to="{ name: 'comments', params: { id: post.post_id } }">
+                    <button id="comments-button" type="button">
+                      Comments...
+                    </button>
+                  </router-link>
+                </div>
+              </template>
+            </PostCard>
           </template>
         </ListLayout>
       </section>
@@ -31,6 +55,7 @@ import RecentPostWrapper from "@/components/RecentPostWrapper.vue";
 import ListLayout from "@/components/ListLayout.vue";
 import PostCard from "@/components/PostCard.vue";
 import { mapState } from "vuex";
+import { formattedDate } from "@/utils";
 
 export default {
   name: "HomeView",
@@ -53,12 +78,16 @@ export default {
       await this.$store.dispatch("fetchAllPosts");
       this.loading = false;
     },
+    formatDate(dateString) {
+      return formattedDate(dateString);
+    }
   },
-  created() {
+  beforeMount() {
     this.getAllPosts();
   },
 };
 </script>
+
 <style scoped>
 #posts-list {
   margin-top: 4rem;

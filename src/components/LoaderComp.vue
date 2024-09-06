@@ -1,5 +1,5 @@
 <template>
-  <div class="dot-spinner">
+  <div class="dot-spinner m-auto">
     <div class="dot-spinner__dot"></div>
     <div class="dot-spinner__dot"></div>
     <div class="dot-spinner__dot"></div>

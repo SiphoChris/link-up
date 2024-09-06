@@ -8,6 +8,9 @@ export default {
     setPosts: (state, posts) => {
       state.posts = posts
     },
+    setPost: (state, post) => {
+      state.post = post
+    },
     setComments: (state, comments) => {
       state.comments = comments
     },
