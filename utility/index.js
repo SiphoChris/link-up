@@ -1,5 +1,3 @@
-// utility/index.js
-
 export async function cacheData(key, value, expiration = 1800) {
   try {
     await redisClient.set(key, JSON.stringify(value), 'EX', expiration);
