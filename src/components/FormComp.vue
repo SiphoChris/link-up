@@ -1,83 +1,79 @@
 <template>
-    <div class="form-container">
-      <p class="title">{{ isLoginMode ? "Sign In" : "Create Account" }}</p>
-      <form class="form" @submit.prevent="handleSubmit">
-        <div class="input-group" v-if="!isLoginMode">
-          <label for="name">Username</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Sarah Smith"
-            v-model="username"
-            required
-          />
-        </div>
-        <div class="input-group">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Type your email..."
-            v-model="email"
-            required
-          />
-        </div>
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Type your password..."
-            v-model="password"
-            required
-          />
-        </div>
-        <button class="submit" type="submit">
-          {{ isLoginMode ? "Sign In" : "Sign Up" }}
-        </button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "FormComp",
-    props: {
-      isLoginMode: {
-        type: Boolean,
-        default: false,
-      },
-    },
-    data() {
-      return {
-        username: "",
-        email: "",
-        password: "",
-      };
-    },
-    methods: {
-      handleSubmit() {
-        const payload = {
-          email: this.email,
-          password: this.password,
-        };
-        
-        if (!this.isLoginMode) {
-          payload.username = this.username;
-          // Handle sign-up logic here
-          console.log("Sign Up:", payload);
-        } else {
-          // Handle sign-in logic here
-          console.log("Sign In:", payload);
-        }
-      },
-    },
-  };
-  </script>
+  <div class="form-container">
+    <p class="title">{{ isLoginMode ? "Sign In" : "Create Account" }}</p>
+    <form class="form" @submit.prevent="handleSubmit">
+      <div class="input-group" v-if="!isLoginMode">
+        <label for="name">Username</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Sarah Smith"
+          v-model="username"
+          required
+        />
+      </div>
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Type your email..."
+          v-model="email"
+          required
+        />
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Type your password..."
+          v-model="password"
+          required
+        />
+      </div>
+      <button class="submit" type="submit">
+        {{ isLoginMode ? "Sign In" : "Sign Up" }}
+      </button>
+    </form>
+  </div>
+</template>
 
+<script>
+export default {
+  name: "FormComp",
+  props: {
+    isLoginMode: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      username: "",
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    handleSubmit() {
+      const payload = {
+        email: this.email,
+        password: this.password,
+      };
+      
+      if (!this.isLoginMode) {
+        payload.username = this.username;
+      }
+      
+      this.$emit('submit', payload);
+    },
+  },
+};
+</script>
 <style scoped>
 .form-container {
   width: 320px;

@@ -36,7 +36,7 @@
                 <div class="card-interactions">
                   <router-link :to="{ name: 'comments', params: { id: post.post_id } }">
                     <button id="comments-button" type="button">
-                      Comments...
+                      <i class="bi bi-chat-left-dots-fill"></i> Comments
                     </button>
                   </router-link>
                 </div>
