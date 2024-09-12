@@ -31,6 +31,35 @@ export class Comments {
         }
     }
 
+
+    async getCommentsByPostId(postId) {
+        const queryString = `
+            SELECT 
+                Comments.comment_id,
+                Comments.comment_text,
+                Comments.created_at,
+                Users.username,
+                Users.profile_picture
+            FROM Comments
+            JOIN Users ON Comments.user_id = Users.user_id
+            WHERE Comments.post_id = ?
+            ORDER BY Comments.created_at DESC
+        `;
+        try {
+            const [rows] = await db.execute(queryString, [postId]);
+    
+            if (rows.length === 0) {
+                return { success: false, status: 404, message: 'No comments found' };
+            }
+    
+            return { success: true, status: 200, result: rows };
+        } catch (err) {
+            console.error('Error fetching comments for post:', err);
+            return { success: false, message: err.message };
+        }
+    }
+    
+
     async createComment(comment) {
         const queryString = 'INSERT INTO Comments (comment_text, post_id, user_id) VALUES (?, ?, ?)';
         try {

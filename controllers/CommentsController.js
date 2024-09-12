@@ -31,7 +31,9 @@ commentRouter.get('/:id', async (req, res) => {
 });
 
 // Private routes
-commentRouter.post('/create', verifyAToken, async (req, res) => {
+// commentRouter.use(verifyAToken);
+
+commentRouter.post('/create', async (req, res) => {
     const { content, post_id, user_id } = req.body;
     if (!content || !post_id || !user_id) {
         return res.status(400).json({ message: 'Missing required fields' });
@@ -44,7 +46,7 @@ commentRouter.post('/create', verifyAToken, async (req, res) => {
     }
 });
 
-commentRouter.patch('/update/:id', verifyAToken, async (req, res) => {
+commentRouter.patch('/update/:id', async (req, res) => {
     const { id } = req.params;
     const { content } = req.body;
     if (!content) {
@@ -58,7 +60,7 @@ commentRouter.patch('/update/:id', verifyAToken, async (req, res) => {
     }
 });
 
-commentRouter.delete('/delete/:id', verifyAToken, async (req, res) => {
+commentRouter.delete('/delete/:id', async (req, res) => {
     const { id } = req.params;
     const result = await comment.deleteComment(id);
     if (result.success) {

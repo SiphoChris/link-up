@@ -28,65 +28,66 @@ adminRouter.post("/login", async (req, res) => {
 });
 
 // Protected routes
-adminRouter.use(verifyAToken);
+// adminRouter.use(verifyAToken);
+// adminRouter.use(roleAuth(['admin']));
 
 // User CRUD operations
-adminRouter.get("/users/all", roleAuth(["admin"]), async (req, res) => {
+adminRouter.get("/users/all", async (req, res) => {
   const result = await admin.getUsers();
   res.status(result.success ? 200 : 500).json(result);
 });
 
-adminRouter.get("/users/:id", roleAuth(["admin"]), async (req, res) => {
+adminRouter.get("/users/:id", async (req, res) => {
   const { id } = req.params;
   const result = await admin.getUserById(id);
   res.status(result.success ? 200 : 404).json(result);
 });
 
-adminRouter.post("/users/add", roleAuth(["admin"]), async (req, res) => {
+adminRouter.post("/users/add", async (req, res) => {
   const user = req.body;
   const result = await admin.createUser(user);
   res.status(result.success ? 201 : 400).json(result);
 });
 
-adminRouter.patch("/users/update/:id", roleAuth(["admin"]), async (req, res) => {
+adminRouter.patch("/users/update/:id", async (req, res) => {
   const { id } = req.params;
   const user = req.body;
   const result = await admin.updateUser(id, user);
   res.status(result.success ? 200 : 404).json(result);
 });
 
-adminRouter.delete("/users/delete/:id", roleAuth(["admin"]), async (req, res) => {
+adminRouter.delete("/users/delete/:id", async (req, res) => {
   const { id } = req.params;
   const result = await admin.deleteUser(id);
   res.status(result.success ? 200 : 404).json(result);
 });
 
 // Post CRUD operations
-adminRouter.get("/posts/all", roleAuth(["admin"]), async (req, res) => {
+adminRouter.get("/posts/all", async (req, res) => {
   const result = await admin.getPosts();
   res.status(result.success ? 200 : 500).json(result);
 });
 
-adminRouter.get("/posts/:id", roleAuth(["admin"]), async (req, res) => {
+adminRouter.get("/posts/:id", async (req, res) => {
   const { id } = req.params;
   const result = await admin.getPostById(id);
   res.status(result.success ? 200 : 404).json(result);
 });
 
-adminRouter.post("/posts/create", roleAuth(["admin"]), async (req, res) => {
+adminRouter.post("/posts/create", async (req, res) => {
   const post = req.body;
   const result = await admin.createPost(post);
   res.status(result.success ? 201 : 400).json(result);
 });
 
-adminRouter.patch("/posts/update/:id", roleAuth(["admin"]), async (req, res) => {
+adminRouter.patch("/posts/update/:id", async (req, res) => {
   const { id } = req.params;
   const post = req.body;
   const result = await admin.updatePost(id, post);
   res.status(result.success ? 200 : 404).json(result);
 });
 
-adminRouter.delete("/posts/delete/:id", roleAuth(["admin"]), async (req, res) => {
+adminRouter.delete("/posts/delete/:id", async (req, res) => {
   const { id } = req.params;
   const result = await admin.deletePost(id);
   res.status(result.success ? 200 : 404).json(result);

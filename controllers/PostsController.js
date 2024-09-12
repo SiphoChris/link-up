@@ -19,18 +19,31 @@ postRouter.get('/all', async (req, res) => {
     }
 });
 
+postRouter.get('/recent', async (req, res) => {
+    const result = await post.getRecentPosts();
+    if (result.success) {
+        res.status(200).json(result.result);
+    } else {
+        res.status(result.status).json({ message: result.message });
+    }
+});
+
 postRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
     const result = await post.getPostById(id);
     if (result.success) {
-        res.status(200).json(result.result[0]);
+        res.status(200).json({
+            result : result.result 
+        });
     } else {
         res.status(result.status).json({ message: result.message });
     }
 });
 
 // Private routes
-postRouter.post('/create', verifyAToken, async (req, res) => {
+// postRouter.use(verifyAToken);
+
+postRouter.post('/create', async (req, res) => {
     const { content } = req.body;
     const result = await post.createPost({ content });
     if (result.success) {
@@ -40,7 +53,7 @@ postRouter.post('/create', verifyAToken, async (req, res) => {
     }
 });
 
-postRouter.delete('/delete/:id', verifyAToken, async (req, res) => {
+postRouter.delete('/delete/:id', async (req, res) => {
     const { id } = req.params;
     const result = await post.deletePost(id);
     if (result.success) {
@@ -50,7 +63,7 @@ postRouter.delete('/delete/:id', verifyAToken, async (req, res) => {
     }
 });
 
-postRouter.patch('/update/:id', verifyAToken, async (req, res) => {
+postRouter.patch('/update/:id', async (req, res) => {
     const { id } = req.params;
     const { content } = req.body;
     const result = await post.updatePost(id, { content });

@@ -6,8 +6,19 @@ export class Posts {
         this.comments = new Comments();
     }
 
+
     async getPosts() {
-        const queryString = 'SELECT * FROM Posts ORDER BY created_at DESC';
+        const queryString = `
+            SELECT 
+                Posts.post_id,
+                Posts.content,
+                Posts.created_at,
+                Users.username,
+                Users.profile_picture
+            FROM Posts
+            JOIN Users ON Posts.user_id = Users.user_id
+            ORDER BY Posts.created_at DESC
+        `;
         try {
             const [rows] = await db.execute(queryString);
             if (rows.length === 0) {
@@ -20,23 +31,53 @@ export class Posts {
         }
     }
 
+
+
+    async getRecentPosts() {
+        const queryString = `
+            SELECT 
+                Posts.post_id,
+                Posts.content,
+                Posts.created_at,
+                Users.username,
+                Users.profile_picture
+            FROM Posts
+            JOIN Users ON Posts.user_id = Users.user_id
+            ORDER BY Posts.created_at DESC
+            LIMIT 10
+        `;
+        try {
+            const [rows] = await db.execute(queryString);
+            if (rows.length === 0) {
+                return { success: false, status: 404, message: 'No recent posts found' };
+            }
+            return { success: true, result: rows };
+        } catch (err) {
+            console.error('Error getting recent posts:', err);
+            return { success: false, status: 500, message: err.message };
+        }
+    }
+    
+
     async getPostById(id) {
-        const postQuery = 'SELECT * FROM Posts WHERE post_id = ?';
+        const postQuery = `
+          SELECT Posts.*, Users.username, Users.profile_picture 
+          FROM Posts 
+          JOIN Users ON Posts.user_id = Users.user_id 
+          WHERE Posts.post_id = ?
+        `;
         try {
             const [postRows] = await db.execute(postQuery, [id]);
-
             if (postRows.length === 0) {
                 return { success: false, status: 404, message: 'Post not found' };
             }
-
-            // Fetch comments related to this post
+    
             const commentsResponse = await this.comments.getCommentsByPostId(id);
-
-            // Include the comments in the post response
+    
             return {
                 success: true,
                 result: {
-                    ...postRows[0],
+                    post: postRows[0],
                     comments: commentsResponse.success ? commentsResponse.result : []
                 }
             };
@@ -45,6 +86,7 @@ export class Posts {
             return { success: false, status: 500, message: err.message };
         }
     }
+    
 
     async createPost(post) {
         const queryString = 'INSERT INTO Posts (content) VALUES (?)';
@@ -81,10 +123,10 @@ export class Posts {
             if (result.affectedRows === 0) {
                 return { success: false, status: 404, message: 'Post not found' };
             }
-            return { success: true, status: 201, result: { id } };
+            return { success: true, status: 200, result: { id } };
         } catch (err) {
             console.error('Error updating post:', err);
-            return { success: false, message: err.message };
+            return { success: false, status: 500, message: err.message };
         }
     }
 }

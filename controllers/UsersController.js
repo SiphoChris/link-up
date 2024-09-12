@@ -34,9 +34,10 @@ userRouter.post("/login", async (req, res) => {
 });
 
 // Protected routes
-userRouter.use(verifyAToken);
+// userRouter.use(verifyAToken);
+// userRouter.use(roleAuth(["admin", "user"]));
 
-userRouter.get("/all", roleAuth(["admin", "user"]), async (req, res) => {
+userRouter.get("/all", async (req, res) => {
   const result = await user.getAllUsers();
   if (result.success) {
     res.status(200).json(result.result);
@@ -45,41 +46,35 @@ userRouter.get("/all", roleAuth(["admin", "user"]), async (req, res) => {
   }
 });
 
-userRouter.get("/:id", roleAuth(["admin", "user"]), async (req, res) => {
-  const { id } = req.params;
-  const result = await user.getUserById(id);
+userRouter.get("/:id", async (req, res) => {
+  const result = await user.getUserById(req.params.id);
   if (result.success) {
     res.status(200).json(result.result);
   } else {
-    res.status(404).json({ message: result.message });
+    res.status(500).json({ message: result.message });
   }
 });
 
-userRouter.patch("/update/:id", roleAuth(["admin", "user"]), async (req, res) => {
+userRouter.patch("/update/:id", async (req, res) => {
   const { id } = req.params;
   const { username, email, password } = req.body;
   const result = await user.updateUser(id, { username, email, password });
+
+  if (result.success) {
+    res.status(200).json({ message: result.message });
+  } else {
+    res.status(400).json({ message: result.message });
+  }
+});
+
+
+userRouter.delete("/delete/:id", async (req, res) => {
+  const result = await user.deleteUser(req.params.id);
   if (result.success) {
     res.status(200).json({ message: result.message });
   } else {
     res.status(500).json({ message: result.message });
   }
-});
-
-userRouter.delete("/delete/:id", roleAuth(["admin", "user"]), async (req, res) => {
-  const { id } = req.params;
-  const result = await user.deleteUser(id);
-  if (result.success) {
-    res.status(200).json({ message: result.message });
-  } else {
-    res.status(500).json({ message: result.message });
-  }
-});
-
-// Error handling
-userRouter.use((err, req, res, next) => {
-  console.error('Unexpected error:', err);
-  res.status(500).json({ success: false, message: 'Internal server error' });
 });
 
 export default userRouter;
