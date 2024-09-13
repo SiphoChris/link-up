@@ -5,27 +5,69 @@ import { hash, compare } from "bcrypt";
 export class Users {
 
   // Create a new user
-  async createUser(user) {
-    const queryString = "INSERT INTO Users (username, email, user_role, password_hash) VALUES (?, ?, ?, ?)";
-    try {
-      const hashedPassword = await hash(user.password, 10);
-      const values = [user.username, user.email, user.role || "user", hashedPassword];
-      const [result] = await db.execute(queryString, values);
+  // async createUser(user) {
+  //   const queryString = "INSERT INTO Users (username, email, user_role, password_hash) VALUES (?, ?, ?, ?)";
+  //   try {
+  //     const hashedPassword = await hash(user.password, 10);
+  //     const values = [user.username, user.email, user.role || "user", hashedPassword];
+  //     const [result] = await db.execute(queryString, values);
   
-      if (result.affectedRows === 0) {
-        return { success: false, message: "Error creating user" };
-      }
+  //     if (result.affectedRows === 0) {
+  //       return { success: false, message: "Error creating user" };
+  //     }
   
-      const token = createToken({
-        email: user.email,
-        role: user.role || "user",
-        id: result.insertId,
-      });
-      return { success: true, result: { id: result.insertId, token } };
-    } catch (err) {
-      return { success: false, message: err.message };
+  //     const token = createToken({
+  //       email: user.email,
+  //       role: user.role || "user",
+  //       id: result.insertId,
+  //     });
+  //     return { success: true, result: { id: result.insertId, token } };
+  //   } catch (err) {
+  //     return { success: false, message: err.message };
+  //   }
+  // }
+
+// Create a new user
+async createUser(user) {
+  const checkUsernameQuery = "SELECT COUNT(*) AS count FROM Users WHERE username = ?";
+  const checkEmailQuery = "SELECT COUNT(*) AS count FROM Users WHERE email = ?";
+  const createUserQuery = "INSERT INTO Users (username, email, user_role, password_hash) VALUES (?, ?, ?, ?)";
+
+  try {
+    // Check if username is already taken
+    const [checkUsernameResult] = await db.execute(checkUsernameQuery, [user.username]);
+    if (checkUsernameResult[0].count > 0) {
+      return { success: false, message: "Username already taken" };
     }
+
+    // Check if email is already taken
+    const [checkEmailResult] = await db.execute(checkEmailQuery, [user.email]);
+    if (checkEmailResult[0].count > 0) {
+      return { success: false, message: "Email already taken" };
+    }
+
+    // Proceed with user creation
+    const hashedPassword = await hash(user.password, 10);
+    const values = [user.username, user.email, user.role || "user", hashedPassword];
+    const [result] = await db.execute(createUserQuery, values);
+
+    if (result.affectedRows === 0) {
+      return { success: false, message: "Error creating user" };
+    }
+
+    const token = createToken({
+      email: user.email,
+      role: user.role || "user",
+      id: result.insertId,
+    });
+    return { success: true, result: { id: result.insertId, token } };
+  } catch (err) {
+    console.error("Error creating user:", err);
+    return { success: false, message: "Internal server error" };
   }
+}
+
+
 
       // User login
       async loginUser(email, password) {
