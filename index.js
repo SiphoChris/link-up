@@ -14,9 +14,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
+server.use(corsResolver);
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
-server.use(corsResolver);
 server.use(express.static('./static'));
 
 // Routes
