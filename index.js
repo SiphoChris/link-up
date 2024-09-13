@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import 'dotenv/config';
 import routes from './controllers/index.js';
 import globalErrorHandler from './middlewares/GlobalErrorHandling.js';
-import corsResolver from './middlewares/CorsResolver.js';
+import corsResolver from './middlewares/CORSResolver.js';
 
 const server = express();
 const port = +process.env.PORT || 4000;
